@@ -32,33 +32,10 @@ echo "$VERSION" > ~/version
 mkdir -p ./AppDir/bin
 cd ./Lighthouse
 
-# On aarch64, GNU ld fails with ".eh_frame_hdr refers to overlapping FDEs"
-# because libtcc1.a is compiled by tcc itself and tcc's arm64 .eh_frame
-# generation is broken. Build it with the system compiler instead (official
-# tinycc knob) and skip .eh_frame_hdr generation as a safety net.
-#LINKER_FLAGS=""
-#if [ "$ARCH" = "aarch64" ]; then
-#    sed -i 's|-C "[$][{]tinycc_SOURCE_DIR[}]/lib"|& arm64-libtcc1-usegcc=yes|' \
-#        libultraship/cmake/dependencies/common.cmake
-#    grep -q 'arm64-libtcc1-usegcc=yes' \
-#        libultraship/cmake/dependencies/common.cmake
-#    LINKER_FLAGS="-DCMAKE_EXE_LINKER_FLAGS=-Wl,--no-eh-frame-hdr"
-#fi
-
 cmake . \
     -Bbuild \
     -GNinja \
-    -DCMAKE_POSITION_INDEPENDENT_CODE=ON #\
-#    $LINKER_FLAGS
-
-# armflush.c calls __arm64_clear_cache(), a tcc-only builtin. With
-# arm64-libtcc1-usegcc=yes the file is compiled by GCC instead, where
-# that is an implicit-declaration error (GCC 14+). The tinycc sources
-# only exist after configure (FetchContent), so patch them here.
-#if [ "$ARCH" = "aarch64" ]; then
-#    sed -i 's|__arm64_clear_cache(beg, end);|__builtin___clear_cache(beg, end);|' \
-#        build/_deps/tinycc-src/lib/armflush.c
-#fi
+    -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 
 cmake --build build --config Release
 cmake --build build --config Release --target GeneratePortO2R
