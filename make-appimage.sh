@@ -13,7 +13,7 @@ export STARTUPWMCLASS=Lighthouse
 export DEPLOY_OPENGL=1
 
 # Deploy dependencies
-quick-sharun /PATH/TO/BINARY_AND_LIBRARIES_HERE
+quick-sharun ./AppDir/bin/* /usr/bin/zenity
 
 # Turn AppDir into AppImage
 quick-sharun --make-appimage
