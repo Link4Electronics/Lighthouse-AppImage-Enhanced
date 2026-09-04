@@ -10,7 +10,6 @@ pacman -Syu --noconfirm \
     cmake         \
     fmt           \
     libzip        \
-    ninja         \
     nlohmann-json \
     sdl2_net      \
     spdlog        \
@@ -34,11 +33,7 @@ cd ./Lighthouse
 patch -Np1 -i ../torch-src-dest-paths.patch
 patch -Np1 -i ../thread5-mesg-guard.patch
 
-cmake . \
-    -Bbuild \
-    -GNinja \
-    -DCMAKE_POSITION_INDEPENDENT_CODE=ON
-
+cmake ./ -Bbuild -DCMAKE_POSITION_INDEPENDENT_CODE=ON
 cmake --build build --config Release
 cmake --build build --config Release --target GeneratePortO2R
 
