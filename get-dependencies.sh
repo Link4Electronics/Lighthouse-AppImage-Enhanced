@@ -32,6 +32,7 @@ echo "$VERSION" > ~/version
 mkdir -p ./AppDir/bin
 cd ./Lighthouse
 patch -Np1 -i ../torch-src-dest-paths.patch
+patch -Np1 -i ../thread5-mesg-guard.patch
 
 cmake . \
     -Bbuild \
